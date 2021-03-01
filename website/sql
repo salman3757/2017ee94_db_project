@@ -1,0 +1,115 @@
+
+CREATE TABLE if not exists customers
+(
+      id            INT               NOT NULL  AUTO_INCREMENT,
+      fname         VARCHAR(100)      NOT NULL,
+      lname         VARCHAR(100)      NOT NULL,
+      phone         VARCHAR(20)       NOT NULL,     
+      email         VARCHAR(200)      NOT NULL,
+      password      VARCHAR(100)      NOT NULL,
+      
+      PRIMARY KEY (id)
+);
+
+CREATE TABLE if not exists addresses
+(
+     id            INT                NOT NULL    AUTO_INCREMENT,
+     city          VARCHAR(50)        NOT NULL,
+     state         VARCHAR(50)        NOT NULL,
+     zip           VARCHAR(50)        NOT NULL,
+     detail        TEXT               NOT NULL,
+     customerid    INT ,
+     
+     PRIMARY KEY (id),
+
+);
+
+CREATE TABLE if not exists administrators
+(
+     id             INT               NOT NULL  AUTO_INCREMENT,
+     fname          VARCHAR(100)      NOT NULL,
+     lname          VARCHAR(100)      NOT NULL,
+     email          VARCHAR(200)      NOT NULL,
+     password       VARCHAR(100)      NOT NULL,
+     
+     PRIMARY KEY (id)
+);
+
+CREATE TABLE if not exists categories
+(
+     id         INT                NOT NULL   AUTO_INCREMENT,
+     name       VARCHAR(100)       NOT NULL,
+     
+     PRIMARY KEY (id)
+);
+
+
+CREATE TABLE if not exists products
+(
+     id           INT                  NOT NULL    AUTO_INCREMENT,
+     code         VARCHAR(100)         NOT NULL,
+     name         VARCHAR(200)         NOT NULL,
+     description  TEXT                 NOT NULL,
+     price        DECIMAL(20,2)        NOT NULL,
+     categoryid   INT                  ,
+     
+     PRIMARY KEY (id)
+    
+);
+
+CREATE TABLE if not exists orders
+(
+     id            INT                NOT NULL   AUTO_INCREMENT,
+     orderdate     DATETIME           NOT NULL,
+     shipdate      DATETIME                      DEFAULT NULL,
+     customerid    INT                ,
+     productid     INT                ,
+     
+     PRIMARY KEY (id)
+);
+
+CREATE TABLE if not exists reviews
+(
+     reviewdate         DATETIME,
+     customerid         INT ,
+     productid          INT,
+     Rating             INT,
+     Detail             TEXT,
+     PRIMARY KEY (reviewdate, customerid, productid)
+);
+
+CREATE TABLE if not exists cart
+(
+	id              INT            NOT NULL   AUTO_INCREMENT,
+	itemquantuity   INT            NOT NULL,
+    productid       INT   ,
+    addressid       INT   , 
+    
+    PRIMARY KEY (id),
+    FOREIGN KEY (productid) REFERENCES products(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    FOREIGN KEY (addressid) REFERENCES addresses(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+ );
+ 
+ CREATE TABLE payment
+ (
+      cardno        VARCHAR(200)       NOT NULL,
+      cartid        INT                        ,  
+      totalamount   DECIMAL(40, 2)     NOT NULL,
+      paymenttype   VARCHAR(50)        NOT NULL,
+      cardexpire    CHAR(7)            NOT NULL,
+	
+      PRIMARY KEY (cardno, cartid),
+      FOREIGN KEY (cartid) REFERENCES cart(id)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE
+ );
+
+
+
+GRANT ALL
+ON *
+TO salman@localhost;
